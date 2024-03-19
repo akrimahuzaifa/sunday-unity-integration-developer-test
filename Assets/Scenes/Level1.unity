@@ -348,7 +348,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   level: 1
-  torqueAmount: 5
+  torqueAmount: 15
 --- !u!4 &601058362
 Transform:
   m_ObjectHideFlags: 0

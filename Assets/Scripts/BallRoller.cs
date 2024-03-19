@@ -9,8 +9,10 @@ public class BallRoller : MonoBehaviour
     public float torqueAmount;
     private Vector3 cameraOffset;
 
-    private bool isPressing = false;
     private Vector2 originalPressPoint = Vector2.zero;
+    private Rigidbody ballRb;
+    [SerializeField]
+    private int multiplier = 100;
 
     private void Awake()
     {
@@ -19,32 +21,38 @@ public class BallRoller : MonoBehaviour
 
     private void Start()
     {
-        cameraOffset = GameObject.Find("PlayerBall").transform.position - Camera.main.transform.position;
+        Transform playerBall = GameObject.Find("PlayerBall").transform;
+        cameraOffset = playerBall.position - Camera.main.transform.position;
+        ballRb = playerBall.GetComponent<Rigidbody>();
     }
 
-    private void Update()
+    //used fixedUpdate & Time for consistancy accross different frame-rates
+    private void FixedUpdate()
     {
-        var ballRigidbody = GameObject.Find("PlayerBall").GetComponent<Rigidbody>();
-
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButtonDown(0))
         {
-            if (!isPressing)
-            {
-                originalPressPoint = Input.mousePosition;
-                isPressing = true;
-            }
-            else
-            {
-                Vector2 diff = (originalPressPoint - new Vector2(Input.mousePosition.x, Input.mousePosition.y)).normalized;
-                
-                ballRigidbody.AddTorque((Vector3.forward * diff.x + Vector3.right * -diff.y) * torqueAmount, ForceMode.VelocityChange);
-            }
+            originalPressPoint = Input.mousePosition;           
         }
-        else
+        else if (Input.GetMouseButton(0))
         {
-            isPressing = false;
+            //using Input.GetAxis for more precise/smooth caluation for torque
+            float horizontalInput = Input.GetAxis("Mouse X");
+            float verticalInput = Input.GetAxis("Mouse Y");
+            Vector2 diff = new Vector2(horizontalInput, verticalInput).normalized;
+
+            var movement = (Vector3.forward * -diff.x + Vector3.right * diff.y) * torqueAmount * Time.deltaTime;
+            ballRb.AddTorque(movement * multiplier, ForceMode.VelocityChange);
+            //Vector2 diff = (originalPressPoint - new Vector2(Input.mousePosition.x, Input.mousePosition.y)).normalized;
+            //ballRigidbody.AddTorque((Vector3.forward * diff.x + Vector3.right * -diff.y) * torqueAmount, ForceMode.VelocityChange);
+        }
+        else if (Input.GetMouseButtonUp(0))
+        {
+            ballRb.angularVelocity = Vector3.zero;
         }
 
-        Camera.main.transform.position = ballRigidbody.transform.position - cameraOffset;
+    }
+    private void LateUpdate()
+    {
+        Camera.main.transform.position = ballRb.transform.position - cameraOffset;
     }
 }
