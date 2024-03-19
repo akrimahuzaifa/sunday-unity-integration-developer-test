@@ -6,14 +6,13 @@ using UnityEngine.SceneManagement;
 
 public class FinishTarget : MonoBehaviour
 {
-    public int currentLevel = 1;
-    public string sceneToLoad = "Level2";
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.name == "PlayerBall")
         {
-            MyEventSystem.I.CompleteLevel(1);
-            SceneManager.LoadScene(sceneToLoad);
+            int currentSceneIndex = LevelManager.instance.GetActiveSceneIndex();
+            MyEventSystem.I.CompleteLevel(currentSceneIndex);
+            LevelManager.instance.LoadNextLevel();
         }
     }
 }

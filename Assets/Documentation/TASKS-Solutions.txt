@@ -1,0 +1,16 @@
+1. Added a .gitignore file in order to fix issue => 
+Git Repository: There are issues with the git repository as numerous irrelevant files are included in pushes. 
+
+2. Added a .asemref file and reference it to MyEventSystem Assembly in Gameanalytics plugin folder to solve the issue =>
+MyEventSystem Class: MyEventSystem class is unable to find GameAnalytics required to send level start and finish events. Although the GameAnalytics unitypackage containing the script for handling events has been imported, it is not functioning as expected.
+
+3. Fix issue => Performance Issues: Despite the game having minimal objects and scripts, performance issues persist on mobile devices. By doing the following:
+a. Using antialiasing on a mobile device may decrease performance severely. Changed the mobile quality settings in 'Project Settings -> Quality Settings -> Anti Aliasing' from "2x multi-sampling"to "Disabled".
+b. Using more than 1 pixel lights on a mobile device may decrease performance severely. Changed the mobile quality settings in 'Project Settings -> Quality Settings -> Pixel Light Count' from "4" to "1".
+c. Generate a Lightning Settings for better light in scenes.
+d. Change texture format for andriod 
+e. Change Render Queue in material settings from '2000' to '1000' for floor/ground.
+
+4. refactored the code in BallRoller.cs for frame independent and best practices.
+
+5. Added LevelManager for managing levels(new & old) and refactor the BallRoller, Enemy, FinishTarget scripts accrodingly.

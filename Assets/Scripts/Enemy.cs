@@ -6,15 +6,13 @@ using UnityEngine.SceneManagement;
 
 public class Enemy : MonoBehaviour
 {
-    public int currentLevel = 1;
-    public string sceneToLoad = "Level1";
-
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.name == "PlayerBall")
         {
-            MyEventSystem.I.FailLevel(currentLevel);
-            SceneManager.LoadScene(sceneToLoad);
+            int currentSceneIndex = LevelManager.instance.GetActiveSceneIndex();
+            MyEventSystem.I.FailLevel(currentSceneIndex);
+            LevelManager.instance.ReloadCurrentLevel();
         }
     }
 }

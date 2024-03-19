@@ -18,6 +18,7 @@ public class MyEventSystem : MonoBehaviour
     public void StartLevel(int level)
     {
         GameAnalytics.NewProgressionEvent(GAProgressionStatus.Start, level.ToString());
+        //Debug.Log($"Level start: {level}");
     }
     
     public void FailLevel(int level)
